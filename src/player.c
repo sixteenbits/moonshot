@@ -1,6 +1,8 @@
 #include "player.h"
 
-struct player Player = {10, 10};
+struct player Player;
+Player.posx = 10;
+Player.posy = 10;
 
 void move_right()
 {
