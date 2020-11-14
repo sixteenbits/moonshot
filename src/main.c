@@ -1,3 +1,4 @@
+//Incluir libreria
 #include <genesis.h>
 
 #include "version.h"
@@ -5,6 +6,8 @@
 
 void run_intro(void);
 void run_game(void);
+
+Sprite* mainsprt;
 
 void run_intro() {
 	u16 i;
@@ -24,8 +27,10 @@ void run_game() {
 int main(void)
 {
 	VDP_setScreenWidth320();
-	SPR_init(0, 0, 0);
-    
+	
+    SPR_init(0, 0, 0);
+    //mainsprt = SPR_addSprite(&player_sprite, 15, 125);
+
     run_intro();
     VDP_resetScreen();
     run_game();

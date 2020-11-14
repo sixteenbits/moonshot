@@ -3,8 +3,8 @@
 
 struct player
 {
-    u32 posx;
-    u32 posy;
+    u16 posx;
+    u16 posy;
 };
 
 // Move player to the right
