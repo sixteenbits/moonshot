@@ -10,5 +10,8 @@ struct phase3_data_s
 };
 
 void* phase3_init();
+void phase3_destroy(void*);
+u16 phase3_update(void*);
+void phase3_input_handler(u16 joy, u16 state, u16 changed);
 
 #endif
