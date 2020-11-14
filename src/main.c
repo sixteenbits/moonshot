@@ -1,6 +1,7 @@
 #include <genesis.h>
+
 #include "version.h"
-#include "../inc/player.c"
+#include "player.c"
 
 void run_intro(void);
 void run_game(void);
@@ -17,7 +18,7 @@ void run_intro() {
 }
 
 void run_game() {
-	VDP_drawText("THIS IS A TEST", posx, posy);
+	VDP_drawText("THIS IS A TEST", Player.posx, Player.posy);
 }
 
 int main(void)
@@ -32,6 +33,7 @@ int main(void)
     while(TRUE)
     {
         read_controllers();
+        run_game();
         VDP_waitVSync();
     }
 
@@ -49,5 +51,13 @@ void read_controllers()
 
     if(value & BUTTON_LEFT){
         move_left();
+    }
+
+    if(value & BUTTON_UP){
+        move_up();
+    }
+
+    if(value & BUTTON_DOWN){
+        move_down();
     }
 }
