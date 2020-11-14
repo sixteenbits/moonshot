@@ -1,8 +1,14 @@
 #include <genesis.h>
 #include "version.h"
+#include "main.h"
+#include "phase3.h"
 
-void run_intro(void);
-void run_game(void);
+
+struct phase_s phases[1];
+
+void main_init() {
+	phases[0].phase_init=&phase3_init;
+}
 
 void run_intro() {
 	u16 i;
@@ -16,13 +22,15 @@ void run_intro() {
 }
 
 void run_game() {
-	
+	(*phases[0].phase_init)();
 }
 
 int main(void)
 {
 	VDP_setScreenWidth320();
 	SPR_init(0, 0, 0);
+    
+    main_init();
     
     run_intro();
     VDP_resetScreen();
