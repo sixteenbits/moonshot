@@ -1,11 +1,13 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <genesis.h>
+
 struct player
 {
     u16 posx;
     u16 posy;
-};
+} Player;
 
 // Move player to the right
 void move_right(void);

@@ -2,7 +2,8 @@
 #include <genesis.h>
 
 #include "version.h"
-#include "player.c"
+#include "sprites.h"
+#include "player.h"
 
 void run_intro(void);
 void run_game(void);
@@ -21,25 +22,29 @@ void run_intro() {
 }
 
 void run_game() {
-	VDP_drawText("THIS IS A TEST", Player.posx, Player.posy);
+    read_controllers();
+    SPR_setPosition(mainsprt, Player.posx, Player.posy);
+    SPR_update();
+    VDP_waitVSync();
 }
 
 int main(void)
 {
+    u16 ind = TILE_USERINDEX;
+
 	VDP_setScreenWidth320();
 	
     SPR_init(0, 0, 0);
-    //mainsprt = SPR_addSprite(&player_sprite, 15, 125);
+    mainsprt = SPR_addSprite(&player_sprite, Player.posx, Player.posy, TILE_ATTR_FULL(PAL1, TRUE, FALSE, FALSE, ind));
+    VDP_setPalette(PAL1,player_sprite.palette->data);
 
-    run_intro();
-    VDP_resetScreen();
-    run_game();
+    Player.posx = 10;
+    Player.posy = 10;
+
 
     while(TRUE)
     {
-        read_controllers();
         run_game();
-        VDP_waitVSync();
     }
 
     return 0;
@@ -49,6 +54,7 @@ void read_controllers()
 {
     //Se lee el estado del joistick en el puerto 1
     int value = JOY_readJoypad(JOY_1);
+    // VDP_resetScreen();
 
     if(value & BUTTON_RIGHT){
         move_right();
