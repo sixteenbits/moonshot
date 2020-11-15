@@ -4,10 +4,10 @@ struct phase_s
 {
 	void* (*phase_init)(void);
 	void (*phase_destroy)(void*);
-	void (*input_handler)(u16, u16, u16);
+	void (*input_handler)(void*, u16, u16, u16);
 	u16 (*phase_update)(void*);
 	void* data;
-	u16 phase_over;
+	u16 phase_status;
 };
 
 void run_intro(void);

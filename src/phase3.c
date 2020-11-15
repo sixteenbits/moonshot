@@ -12,6 +12,8 @@ void* phase3_init() {
 	
 	// Init data
 	phase3_data->tile_index=TILE_USERINDEX;
+	phase3_data->snake_vx=0;
+	phase3_data->snake_vy=0;
 	for(i=0; i<SNAKE_LENGTH; i++) {
 		phase3_data->snake_enabled[i]=0;
 		phase3_data->snake_x[i]=0;
@@ -43,11 +45,48 @@ void phase3_destroy(void* data) {
 
 // Update Game
 u16 phase3_update(void* data) {
+	// Phase data
+	struct phase3_data_s *phase3_data = (data);
+	// Update data
+	phase3_data->snake_x[0]+=phase3_data->snake_vx;
+	phase3_data->snake_y[0]+=phase3_data->snake_vy;
+	
+	// Update sprite position
+	SPR_setPosition(phase3_data->snake_sprite, 
+		phase3_data->snake_x[0], phase3_data->snake_y[0]);
+		
 	return 0;
 }
 
 // Process input
-void phase3_input_handler(u16 joy, u16 state, u16 changed) {
+// joy-> Indica el mando que ha activado la entrada
+// state -> Indica el estado del mando (boton activado)
+// changed -> indica si ha cambiado (pulsado o solatado)
+void phase3_input_handler(void* data, u16 joy, u16 state, u16 changed) {
+	// Phase data
+	struct phase3_data_s *phase3_data = (data);
 	
+	if (joy == JOY_1){
+		if (changed & state & BUTTON_UP)
+        {
+            phase3_data->snake_vx=0;
+			phase3_data->snake_vy=-SNAKE_SPEED;
+        }
+        if (changed & state & BUTTON_DOWN)
+        {
+            phase3_data->snake_vx=0;
+			phase3_data->snake_vy=SNAKE_SPEED;
+        }
+        if (changed & state & BUTTON_LEFT)
+        {
+            phase3_data->snake_vx=-SNAKE_SPEED;
+			phase3_data->snake_vy=0;
+        }
+        if (changed & state & BUTTON_RIGHT)
+        {
+            phase3_data->snake_vx=+SNAKE_SPEED;
+			phase3_data->snake_vy=0;
+        }
+	}
 }
 

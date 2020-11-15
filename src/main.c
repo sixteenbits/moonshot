@@ -13,7 +13,7 @@ void main_init() {
 	phases[0].phase_destroy=&phase3_destroy;
 	phases[0].input_handler=&phase3_input_handler;
 	phases[0].phase_update=&phase3_update;
-	phases[0].phase_over=0;
+	phases[0].phase_status=0;
 }
 
 void run_intro() {
@@ -29,12 +29,12 @@ void run_intro() {
 
 void run_game(u16 phase) {
 	// Init phase data
-	(*phases[phase].phase_init)();
+	phases[0].data = (*phases[phase].phase_init)();
 	// While phase is not over
-	while(!phases[0].phase_over) {
+	while(!phases[0].phase_status) {
 		// Read Controllers
 		// Update game
-		phases[0].phase_over = (*phases[phase].phase_update)(phases[0].data);
+		phases[0].phase_status = (*phases[phase].phase_update)(phases[0].data);
 		// Print Screen
         SPR_update();
         // Wait until next frame
@@ -76,6 +76,6 @@ int main(void)
 }
 
 void input_handler(u16 joy, u16 state, u16 changed) {
-	(*phases[current_phase].input_handler)(joy, state, changed);
+	(*phases[current_phase].input_handler)(phases[0].data, joy, state, changed);
 }
 
