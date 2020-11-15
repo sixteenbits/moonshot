@@ -40,6 +40,13 @@ void* phase3_init() {
 
 // destroy
 void phase3_destroy(void* data) {
+	// Phase data
+	struct phase3_data_s *phase3_data = (data);
+	
+	// Remove sprites
+	SPR_releaseSprite(phase3_data->snake_sprite);
+	
+	// Free memory
 	MEM_free(data);
 }
 
