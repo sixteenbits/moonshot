@@ -24,7 +24,7 @@ void phase3_destroy(void*);
  *   1 -> Player wins
  *   2-> Player Loose
  * */
-u16 phase3_update(void*);
+u16 phase3_update(void*, u16 frame);
 
 /**
  * Manejador de entrada

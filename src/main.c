@@ -13,7 +13,6 @@ void main_init() {
 	phases[0].phase_destroy=&phase3_destroy;
 	phases[0].input_handler=&phase3_input_handler;
 	phases[0].phase_update=&phase3_update;
-	phases[0].phase_status=0;
 }
 
 void run_intro() {
@@ -27,14 +26,20 @@ void run_intro() {
 	}
 }
 
+void run_game_over() {
+	VDP_drawText("GAME OVER", 10, 13);
+}
+
 void run_game(u16 phase) {
 	// Init phase data
 	phases[0].data = (*phases[phase].phase_init)();
+	phases[0].phase_status=0;
+	phases[0].phase_frame=0;
 	// While phase is not over
 	while(!phases[0].phase_status) {
 		// Read Controllers
 		// Update game
-		phases[0].phase_status = (*phases[phase].phase_update)(phases[0].data);
+		phases[0].phase_status = (*phases[phase].phase_update)(phases[0].data, phases[0].phase_frame);
 		// Print Screen
         SPR_update();
         // Wait until next frame
@@ -65,6 +70,8 @@ int main(void)
     
     
     run_game(0);
+    
+    run_game_over();
 
     while(TRUE)
     {

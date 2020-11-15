@@ -44,7 +44,7 @@ void phase3_destroy(void* data) {
 }
 
 // Update Game
-u16 phase3_update(void* data) {
+u16 phase3_update(void* data, u16 frame) {
 	// Phase data
 	struct phase3_data_s *phase3_data = (data);
 	// Update data
@@ -53,9 +53,9 @@ u16 phase3_update(void* data) {
 	
 	// Update sprite position
 	SPR_setPosition(phase3_data->snake_sprite, 
-		phase3_data->snake_x[0], phase3_data->snake_y[0]);
-		
-	return 0;
+	phase3_data->snake_x[0], phase3_data->snake_y[0]);
+	
+	return frame > 200;
 }
 
 // Process input
