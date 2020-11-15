@@ -7,12 +7,18 @@
 
 struct phase_s phases[1];
 u16 current_phase;
+u16 phase_count;
+u16 win;
 
 void main_init() {
-	phases[0].phase_init=&phase3_init;
-	phases[0].phase_destroy=&phase3_destroy;
-	phases[0].input_handler=&phase3_input_handler;
-	phases[0].phase_update=&phase3_update;
+	phase_count = 0;
+	
+	// Phase 0
+	phases[phase_count].phase_init=&phase3_init;
+	phases[phase_count].phase_destroy=&phase3_destroy;
+	phases[phase_count].input_handler=&phase3_input_handler;
+	phases[phase_count].phase_update=&phase3_update;
+	phase_count++;
 }
 
 void run_intro() {
@@ -59,6 +65,8 @@ void run_game(u16 phase) {
 
 int main(void)
 {
+	u16 i;
+	
 	// Set screen width
     VDP_setScreenWidth320();
 
@@ -74,10 +82,22 @@ int main(void)
     
     // Run 16bits Intro
     run_intro();
-        
-    current_phase = 0;
-    run_game(current_phase);
     
+    // Run phases
+    win = 1;    
+    current_phase = 0;
+    while(current_phase < phase_count) {
+		run_game(current_phase);
+		if(phases[current_phase].phase_status==1) {
+			current_phase++;
+		}
+		else if(phases[current_phase].phase_status==2) {
+			current_phase=phase_count;
+			win = 0;
+		}
+	}
+    
+    // Run Game Over
     run_game_over();
 
     while(TRUE)
