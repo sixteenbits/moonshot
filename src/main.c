@@ -1,6 +1,7 @@
 #include <genesis.h>
 #include "version.h"
 #include "main.h"
+#include "gfx.h"
 #include "phase3.h"
 
 
@@ -8,7 +9,6 @@ struct phase_s phases[1];
 u16 current_phase;
 
 void main_init() {
-	current_phase = 0;
 	phases[0].phase_init=&phase3_init;
 	phases[0].phase_destroy=&phase3_destroy;
 	phases[0].input_handler=&phase3_input_handler;
@@ -27,7 +27,11 @@ void run_intro() {
 }
 
 void run_game_over() {
-	VDP_drawText("GAME OVER", 10, 13);
+	// Reset Screen
+	VDP_resetScreen();
+	VDP_setPaletteColors(PAL0, (u16*)gameover.palette->data, 16);
+    VDP_drawImageEx(PLAN_A, &gameover, 
+		TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, TILE_USERINDEX), 0, 0, FALSE, TRUE);
 }
 
 void run_game(u16 phase) {
@@ -46,6 +50,8 @@ void run_game(u16 phase) {
         SPR_update();
         // Wait until next frame
         VDP_waitVSync();
+        // Count frame
+        phases[phase].phase_frame++;
 	}
 	// Destroy phase data
 	(*phases[phase].phase_destroy)(phases[phase].data);
@@ -68,10 +74,9 @@ int main(void)
     
     // Run 16bits Intro
     run_intro();
-    
-    
-    
-    run_game(0);
+        
+    current_phase = 0;
+    run_game(current_phase);
     
     run_game_over();
 
