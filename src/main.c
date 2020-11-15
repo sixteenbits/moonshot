@@ -34,21 +34,21 @@ void run_game(u16 phase) {
 	// Reset Screen
 	VDP_resetScreen();
 	// Init phase data
-	phases[0].data = (*phases[phase].phase_init)();
-	phases[0].phase_status=0;
-	phases[0].phase_frame=0;
+	phases[phase].data = (*phases[phase].phase_init)();
+	phases[phase].phase_status=0;
+	phases[phase].phase_frame=0;
 	// While phase is not over
-	while(!phases[0].phase_status) {
+	while(!phases[phase].phase_status) {
 		// Read Controllers
 		// Update game
-		phases[0].phase_status = (*phases[phase].phase_update)(phases[0].data, phases[0].phase_frame);
+		phases[phase].phase_status = (*phases[phase].phase_update)(phases[0].data, phases[0].phase_frame);
 		// Print Screen
         SPR_update();
         // Wait until next frame
         VDP_waitVSync();
 	}
 	// Destroy phase data
-	(*phases[phase].phase_destroy)(phases[0].data);
+	(*phases[phase].phase_destroy)(phases[phase].data);
 }
 
 int main(void)
