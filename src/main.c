@@ -31,6 +31,8 @@ void run_game_over() {
 }
 
 void run_game(u16 phase) {
+	// Reset Screen
+	VDP_resetScreen();
 	// Init phase data
 	phases[0].data = (*phases[phase].phase_init)();
 	phases[0].phase_status=0;
@@ -66,7 +68,7 @@ int main(void)
     
     // Run 16bits Intro
     run_intro();
-    VDP_resetScreen();
+    
     
     
     run_game(0);
