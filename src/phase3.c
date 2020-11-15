@@ -18,8 +18,8 @@ void* phase3_init() {
 		phase3_data->snake_y[i]=0;
 	}
 	phase3_data->snake_enabled[0]=1;
-	phase3_data->snake_x[0]=10;
-	phase3_data->snake_y[0]=10;
+	phase3_data->snake_x[0]=152;
+	phase3_data->snake_y[0]=104;
 	
 	// Draw background
 	VDP_setPaletteColors(PAL0, (u16*)snake_background.palette->data, 16);
