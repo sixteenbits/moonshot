@@ -1,5 +1,7 @@
+.vscode/
 out/
 src/boot/
+Gens.cfg
+language.dat
 res/gfx.h
 res/sprt.h
-

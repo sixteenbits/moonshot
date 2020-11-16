@@ -9,6 +9,6 @@ Pulsa el siguiente enlace para probar el juego en tu navegador: [Play!](http://w
 ## Autores
 * [zerasul](https://zerasul.me/)
 * [emiliollbb](http://www.emiliollbb.net/)
-* [Cristobal](https://github.com/orgs/sixteenbits/people/crisconru)
+* [JuanjoSalvador](https://jsalvador.me/)
 
 

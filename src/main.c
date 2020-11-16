@@ -2,8 +2,8 @@
 #include "version.h"
 #include "main.h"
 #include "gfx.h"
+#include "phase2.h"
 #include "phase3.h"
-
 
 struct phase_s phases[1];
 u16 current_phase;
@@ -112,4 +112,3 @@ int main(void)
 void input_handler(u16 joy, u16 state, u16 changed) {
 	(*phases[current_phase].input_handler)(phases[0].data, joy, state, changed);
 }
-
