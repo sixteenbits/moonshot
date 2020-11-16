@@ -1,14 +1,25 @@
-//Incluir libreria
 #include <genesis.h>
-
 #include "version.h"
-#include "sprites.h"
-#include "player.h"
+#include "main.h"
+//#include "gfx.h"
+#include "phase2.h"
 
-void run_intro(void);
-void run_game(void);
 
-Sprite* mainsprt;
+struct phase_s phases[1];
+u16 current_phase;
+u16 phase_count;
+u16 win;
+
+void main_init() {
+	phase_count = 0;
+	
+	// Phase 0
+	phases[phase_count].phase_init=&phase2_init;
+	phases[phase_count].phase_destroy=&phase2_destroy;
+	phases[phase_count].input_handler=&phase2_input_handler;
+	phases[phase_count].phase_update=&phase2_update;
+	phase_count++;
+}
 
 void run_intro() {
 	u16 i;
@@ -21,54 +32,83 @@ void run_intro() {
 	}
 }
 
-void run_game() {
-    read_controllers();
-    SPR_setPosition(mainsprt, Player.posx, Player.posy);
-    SPR_update();
-    VDP_waitVSync();
+void run_game_over() {
+	// Reset Screen
+	VDP_resetScreen();
+	VDP_setPaletteColors(PAL0, (u16*)gameover.palette->data, 16);
+    VDP_drawImageEx(PLAN_A, &gameover, 
+		TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, TILE_USERINDEX), 0, 0, FALSE, TRUE);
+}
+
+void run_game(u16 phase) {
+	// Reset Screen
+	VDP_resetScreen();
+	// Init phase data
+	phases[phase].data = (*phases[phase].phase_init)();
+	phases[phase].phase_status=0;
+	phases[phase].phase_frame=0;
+	// While phase is not over
+	while(!phases[phase].phase_status) {
+		// Read Controllers
+		// Update game
+		phases[phase].phase_status = (*phases[phase].phase_update)(phases[0].data, phases[0].phase_frame);
+		// Print Screen
+        SPR_update();
+        // Wait until next frame
+        VDP_waitVSync();
+        // Count frame
+        phases[phase].phase_frame++;
+	}
+	// Destroy phase data
+	(*phases[phase].phase_destroy)(phases[phase].data);
 }
 
 int main(void)
 {
-    u16 ind = TILE_USERINDEX;
-
-	VDP_setScreenWidth320();
+	u16 i;
 	
+	// Set screen width
+    VDP_setScreenWidth320();
+
+    //Init sprite engine
     SPR_init(0, 0, 0);
-    mainsprt = SPR_addSprite(&player_sprite, Player.posx, Player.posy, TILE_ATTR_FULL(PAL1, TRUE, FALSE, FALSE, ind));
-    VDP_setPalette(PAL1,player_sprite.palette->data);
-
-    Player.posx = 10;
-    Player.posy = 10;
-
+    
+    // Init Controls
+    JOY_init();
+    JOY_setEventHandler(&input_handler);
+    
+    // Init 16bits Engine
+    main_init();
+    
+    // Run 16bits Intro
+    run_intro();
+    
+    // Run phases
+    win = 1;    
+    current_phase = 0;
+    while(current_phase < phase_count) {
+		run_game(current_phase);
+		if(phases[current_phase].phase_status==1) {
+			current_phase++;
+		}
+		else if(phases[current_phase].phase_status==2) {
+			current_phase=phase_count;
+			win = 0;
+		}
+	}
+    
+    // Run Game Over
+    run_game_over();
 
     while(TRUE)
     {
-        run_game();
+        VDP_waitVSync();
     }
+    
 
     return 0;
 }
 
-void read_controllers()
-{
-    //Se lee el estado del joistick en el puerto 1
-    int value = JOY_readJoypad(JOY_1);
-    // VDP_resetScreen();
-
-    if(value & BUTTON_RIGHT){
-        move_right();
-    }
-
-    if(value & BUTTON_LEFT){
-        move_left();
-    }
-
-    if(value & BUTTON_UP){
-        move_up();
-    }
-
-    if(value & BUTTON_DOWN){
-        move_down();
-    }
+void input_handler(u16 joy, u16 state, u16 changed) {
+	(*phases[current_phase].input_handler)(phases[0].data, joy, state, changed);
 }
