@@ -1,9 +1,9 @@
 #include <genesis.h>
 #include "version.h"
 #include "main.h"
-//#include "gfx.h"
+#include "gfx.h"
 #include "phase2.h"
-
+#include "phase3.h"
 
 struct phase_s phases[1];
 u16 current_phase;
@@ -14,10 +14,10 @@ void main_init() {
 	phase_count = 0;
 	
 	// Phase 0
-	phases[phase_count].phase_init=&phase2_init;
-	phases[phase_count].phase_destroy=&phase2_destroy;
-	phases[phase_count].input_handler=&phase2_input_handler;
-	phases[phase_count].phase_update=&phase2_update;
+	phases[phase_count].phase_init=&phase3_init;
+	phases[phase_count].phase_destroy=&phase3_destroy;
+	phases[phase_count].input_handler=&phase3_input_handler;
+	phases[phase_count].phase_update=&phase3_update;
 	phase_count++;
 }
 
