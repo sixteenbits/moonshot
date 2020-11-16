@@ -25,7 +25,7 @@ void* phase3_init() {
 	
 	// Draw background
 	VDP_setPaletteColors(PAL0, (u16*)snake_background.palette->data, 16);
-    VDP_drawImageEx(PLAN_A, &snake_background, 
+    VDP_drawImageEx(BG_A, &snake_background, 
 	TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, phase3_data->tile_index), 0, 0, FALSE, TRUE);
 	
 	// Init snake sprites

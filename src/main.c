@@ -2,10 +2,11 @@
 #include "version.h"
 #include "main.h"
 #include "gfx.h"
+#include "phase1.h"
 #include "phase3.h"
 
 
-struct phase_s phases[1];
+struct phase_s phases[3];
 u16 current_phase;
 u16 phase_count;
 u16 win;
@@ -13,7 +14,13 @@ u16 win;
 void main_init() {
 	phase_count = 0;
 	
-	// Phase 0
+	// Phase 1
+	phases[phase_count].phase_init=&phase1_init;
+	phases[phase_count].phase_destroy=&phase1_destroy;
+	phases[phase_count].input_handler=&phase1_input_handler;
+	phases[phase_count].phase_update=&phase1_update;
+	phase_count+=2;
+	// Phase 3
 	phases[phase_count].phase_init=&phase3_init;
 	phases[phase_count].phase_destroy=&phase3_destroy;
 	phases[phase_count].input_handler=&phase3_input_handler;
@@ -36,7 +43,7 @@ void run_game_over() {
 	// Reset Screen
 	VDP_resetScreen();
 	VDP_setPaletteColors(PAL0, (u16*)gameover.palette->data, 16);
-    VDP_drawImageEx(PLAN_A, &gameover, 
+    VDP_drawImageEx(BG_A, &gameover, 
 		TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, TILE_USERINDEX), 0, 0, FALSE, TRUE);
 }
 
