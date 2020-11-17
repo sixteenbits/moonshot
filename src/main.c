@@ -110,6 +110,6 @@ int main(void)
 }
 
 void input_handler(u16 joy, u16 state, u16 changed) {
-	(*phases[current_phase].input_handler)(phases[0].data, joy, state, changed);
+	(*phases[current_phase].input_handler)(phases[current_phase].data, joy, state, changed);
 }
 
