@@ -14,10 +14,10 @@ void main_init() {
 	phase_count = 0;
 	
 	// Phase 0
-	phases[phase_count].phase_init=&phase3_init;
-	phases[phase_count].phase_destroy=&phase3_destroy;
-	phases[phase_count].input_handler=&phase3_input_handler;
-	phases[phase_count].phase_update=&phase3_update;
+	phases[phase_count].phase_init=&phase2_init;
+	phases[phase_count].phase_destroy=&phase2_destroy;
+	phases[phase_count].input_handler=&phase2_input_handler;
+	phases[phase_count].phase_update=&phase2_update;
 	phase_count++;
 }
 
@@ -36,8 +36,8 @@ void run_game_over() {
 	// Reset Screen
 	VDP_resetScreen();
 	VDP_setPaletteColors(PAL0, (u16*)gameover.palette->data, 16);
-    VDP_drawImageEx(PLAN_A, &gameover, 
-		TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, TILE_USERINDEX), 0, 0, FALSE, TRUE);
+    // VDP_drawImageEx(PLAN_A, &gameover, 
+	// 	TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, TILE_USERINDEX), 0, 0, FALSE, TRUE);
 }
 
 void run_game(u16 phase) {
