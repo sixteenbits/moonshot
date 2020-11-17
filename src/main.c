@@ -65,8 +65,6 @@ void run_game(u16 phase) {
 
 int main(void)
 {
-	u16 i;
-	
 	// Set screen width
     VDP_setScreenWidth320();
 
