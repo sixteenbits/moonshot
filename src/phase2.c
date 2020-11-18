@@ -4,7 +4,6 @@
 #include "sprt.h"
 
 void* phase2_init() {
-	
 	// Allocat memory for data
 	void* data = MEM_alloc(sizeof(struct phase2_data_s));
 	struct phase2_data_s *phase2_data = (data);
@@ -18,12 +17,31 @@ void* phase2_init() {
 	phase2_data->ship_x[0]=152;
 	phase2_data->ship_y[0]=104;
 	
-	// Init ship sprites
-	VDP_setPalette(PAL1,ship_sprite.palette->data);
+    // Background
+    int bg_i = 0;
+    int thex = 0;
+    int they = 0;
+    int val = 1;
+    int offset = 0;
+
+    for( bg_i=0; bg_i < 1280; bg_i++){
+        thex = bg_i % 40;
+        they = bg_i / 40;
+
+        val = (random() %  (10-1+1))+1;
+        if(val > 3) val = 1;
+        
+        VDP_setPalette(PAL1, space_bg.palette->data);
+        VDP_loadTileSet(space_bg.tileset,1,DMA);
+        VDP_setTileMapXY(BG_B,TILE_ATTR_FULL(PAL1,0,0,0,val), thex, they);
+    }
+
+	//Init ship sprites
+	VDP_setPalette(PAL2,ship_sprite.palette->data);
 	phase2_data->ship_sprite = SPR_addSprite(
         &ship_sprite, 
 		phase2_data->ship_x[0], phase2_data->ship_y[0], 
-		TILE_ATTR_FULL(PAL1, TRUE, FALSE, FALSE, phase2_data->tile_index++)
+		TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE, phase2_data->tile_index++)
     );
 	
 	// Return pointer to data
@@ -51,8 +69,10 @@ u16 phase2_update(void* data, u16 frame) {
 	phase2_data->ship_y[0]+=phase2_data->ship_vy;
 	
 	// Update sprite position
-	SPR_setPosition(phase2_data->ship_sprite, 
-	phase2_data->ship_x[0], phase2_data->ship_y[0]);
+	SPR_setPosition(phase2_data->ship_sprite, phase2_data->ship_x[0], phase2_data->ship_y[0]);
+
+    // Update scroll
+    VDP_setVerticalScroll(BG_B,phase2_data->offset -= 1);
 	
 	return 0;
 }

@@ -13,7 +13,23 @@ struct phase2_data_s
 	u16 ship_vx;
 	u16 ship_vy;
 	Sprite* ship_sprite;
+    u16 offset;
 };
+
+typedef struct
+{
+    int x;
+	int y;
+	int w;
+	int h;
+	int velx;
+	int vely;
+	int health;
+	Sprite* sprite;
+	char name[6];
+} Entity;
+
+
 
 void* phase2_init();
 void phase2_destroy(void*);

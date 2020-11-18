@@ -36,8 +36,8 @@ void run_game_over() {
 	// Reset Screen
 	VDP_resetScreen();
 	VDP_setPaletteColors(PAL0, (u16*)gameover.palette->data, 16);
-    // VDP_drawImageEx(PLAN_A, &gameover, 
-	// 	TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, TILE_USERINDEX), 0, 0, FALSE, TRUE);
+    VDP_drawImageEx(BG_A, &gameover, 
+		TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, TILE_USERINDEX), 0, 0, FALSE, TRUE);
 }
 
 void run_game(u16 phase) {
@@ -47,6 +47,7 @@ void run_game(u16 phase) {
 	phases[phase].data = (*phases[phase].phase_init)();
 	phases[phase].phase_status=0;
 	phases[phase].phase_frame=0;
+
 	// While phase is not over
 	while(!phases[phase].phase_status) {
 		// Read Controllers
@@ -69,6 +70,9 @@ int main(void)
 	
 	// Set screen width
     VDP_setScreenWidth320();
+    
+    // Set scrolling mode
+    VDP_setScrollingMode(HSCROLL_PLANE, VSCROLL_PLANE);
 
     //Init sprite engine
     SPR_init(0, 0, 0);
