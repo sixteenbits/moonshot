@@ -7,7 +7,7 @@
 //anims
 
 #define UP 0
-#define IDLE 3
+#define IDLE 4
 #define RIGHT 1
 #define DOWN 2
 #define LEFT 3
@@ -41,5 +41,7 @@ u16 phase1_update(void*, u16 frame);
  * changed -> indica si ha cambiado (pulsado o solatado)
  * */
 void phase1_input_handler(void* data, u16 joy, u16 state, u16 changed);
+
+void phase1_input_sinc_handler(void* data, u16 joy);
 
 #endif

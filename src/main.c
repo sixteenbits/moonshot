@@ -19,6 +19,7 @@ void main_init() {
 	phases[phase_count].phase_destroy=&phase1_destroy;
 	phases[phase_count].input_handler=&phase1_input_handler;
 	phases[phase_count].phase_update=&phase1_update;
+	phases[phase_count].input_sinc_handler=&phase1_input_sinc_handler;
 	phase_count+=2;
 	// Phase 3
 	phases[phase_count].phase_init=&phase3_init;
@@ -57,6 +58,7 @@ void run_game(u16 phase) {
 	// While phase is not over
 	while(!phases[phase].phase_status) {
 		// Read Controllers
+		phases[phase].input_sinc_handler(phases[phase].data,JOY_1);
 		// Update game
 		phases[phase].phase_status = (*phases[phase].phase_update)(phases[0].data, phases[0].phase_frame);
 		// Print Screen
@@ -95,6 +97,7 @@ int main(void)
     current_phase = 0;
     while(current_phase < phase_count) {
 		run_game(current_phase);
+
 		if(phases[current_phase].phase_status==1) {
 			current_phase++;
 		}
@@ -116,6 +119,10 @@ int main(void)
     return 0;
 }
 
+void input_sinc_handler(u16 joy){
+	int status=JOY_readJoypad(joy);
+	(*phases[current_phase].input_sinc_handler)(phases[0].data,joy);
+}
 void input_handler(u16 joy, u16 state, u16 changed) {
 	(*phases[current_phase].input_handler)(phases[0].data, joy, state, changed);
 }

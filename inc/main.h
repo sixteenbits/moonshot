@@ -6,6 +6,7 @@ struct phase_s
 	void (*phase_destroy)(void*);
 	void (*input_handler)(void*, u16, u16, u16);
 	u16 (*phase_update)(void*, u16);
+	void (*input_sinc_handler)(void*, u16);
 	void* data;
 	u16 phase_status;
 	u16 phase_frame;

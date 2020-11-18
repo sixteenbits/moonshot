@@ -37,30 +37,38 @@ u16 phase1_update(void* data, u16 frame) {
     return 0;
 }
 
-void phase1_input_handler(void* data, u16 joy, u16 state, u16 changed){
-
-    struct phase1_data *phase1_data = (data);
+void phase1_input_sinc_handler(void* data, u16 joy){
+     struct phase1_data *phase1_data = (data);
+	u16 state = JOY_readJoypad(joy);
 	
-	if (joy == JOY_1){
-		if (changed & state & BUTTON_UP){
+        
+		if (state & BUTTON_UP){
             phase1_data->player_y--;
             SPR_setAnim(phase1_data->player_sprt,UP);
-        }
+        }else{
 
-        if(changed & state & BUTTON_DOWN){
+        if(state & BUTTON_DOWN){
             phase1_data->player_y++;
             SPR_setAnim(phase1_data->player_sprt,DOWN);
-        }
-
-        if(changed & state & BUTTON_LEFT){
+        }else{ if(state & BUTTON_LEFT){
             phase1_data->player_x--;
             SPR_setAnim(phase1_data->player_sprt,LEFT);
-        }
+        }else{
 
-        if(changed & state & BUTTON_RIGHT){
+        if(state & BUTTON_RIGHT){
             phase1_data->player_x++;
             SPR_setAnim(phase1_data->player_sprt,RIGHT);
         }
-    }
+        else{
+            SPR_setAnim(phase1_data->player_sprt, IDLE);
+        }}}}
+
+
+   
+}
+
+void phase1_input_handler(void* data, u16 joy, u16 state, u16 changed){
+
+    
 
 }
