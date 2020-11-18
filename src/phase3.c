@@ -12,6 +12,7 @@ void* phase3_init() {
 	
 	// Init data
 	phase3_data->tile_index=TILE_USERINDEX;
+	// Init snake cinematics
 	phase3_data->snake_vx=0;
 	phase3_data->snake_vy=0;
 	for(i=0; i<SNAKE_LENGTH; i++) {
@@ -23,6 +24,17 @@ void* phase3_init() {
 	phase3_data->snake_x[0]=152;
 	phase3_data->snake_y[0]=104;
 	
+	// Init cells cinematics
+	for(i=0; i<SNAKE_LENGTH; i++) {
+		phase3_data->cells_enabled[i]=0;
+		phase3_data->cells_x[i]=0;
+		phase3_data->cells_y[i]=0;
+		phase3_data->cells_sprites[i]=NULL;
+	}
+	phase3_data->cells_enabled[0]=1;
+	phase3_data->cells_x[0]=5;
+	phase3_data->cells_y[0]=10;
+	
 	// Draw background
 	VDP_setPaletteColors(PAL0, (u16*)snake_background.palette->data, 16);
     VDP_drawImageEx(BG_A, &snake_background, 
@@ -33,6 +45,12 @@ void* phase3_init() {
 	phase3_data->snake_sprite = SPR_addSprite(&snake_adn, 
 		phase3_data->snake_x[0], phase3_data->snake_y[0], 
 		TILE_ATTR_FULL(PAL1, TRUE, FALSE, FALSE, phase3_data->tile_index++));
+	
+	// Init cells sprites
+	phase3_data->cells_sprites[0] = SPR_addSprite(&snake_adn, 
+		phase3_data->cells_x[0], phase3_data->cells_y[0], 
+		TILE_ATTR_FULL(PAL1, TRUE, FALSE, FALSE, phase3_data->tile_index++));
+	SPR_setAnim(phase3_data->cells_sprites[0],1);
 	
 	// Return pointer to data
 	return data;

@@ -1,18 +1,28 @@
 #include <genesis.h>
 
 #ifndef PHASE3_H
-#define SNAKE_LENGTH 10
+#define SNAKE_LENGTH 11
 #define SNAKE_SPEED 1
+#define CELLS_LENGTH 11
 
 struct phase3_data_s
 {
+	// Tile count
 	u16 tile_index;
+	// Snake cinematics
 	u16 snake_x[SNAKE_LENGTH];
 	u16 snake_y[SNAKE_LENGTH];
 	u16 snake_enabled[SNAKE_LENGTH];
 	u16 snake_vx;
 	u16 snake_vy;
+	// Snake sprites
 	Sprite* snake_sprite;
+	// Healthy cells cinematics
+	u16 cells_x[SNAKE_LENGTH];
+	u16 cells_y[SNAKE_LENGTH];
+	u16 cells_enabled[SNAKE_LENGTH];
+	// Healthy cells sprites
+	Sprite* cells_sprites[CELLS_LENGTH];
 };
 
 void* phase3_init();

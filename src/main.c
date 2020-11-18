@@ -74,8 +74,6 @@ void run_game(u16 phase) {
 
 int main(void)
 {
-	u16 i;
-	
 	// Set screen width
     VDP_setScreenWidth320();
 
@@ -124,6 +122,6 @@ void input_sinc_handler(u16 joy){
 	(*phases[current_phase].input_sinc_handler)(phases[0].data,joy);
 }
 void input_handler(u16 joy, u16 state, u16 changed) {
-	(*phases[current_phase].input_handler)(phases[0].data, joy, state, changed);
+	(*phases[current_phase].input_handler)(phases[current_phase].data, joy, state, changed);
 }
 
