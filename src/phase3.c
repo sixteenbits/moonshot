@@ -2,6 +2,7 @@
 #include "phase3.h"
 #include "gfx.h"
 #include "sprt.h"
+#include "sfx.h"
 
 void* phase3_init() {
 	u16 i;
@@ -35,6 +36,11 @@ void* phase3_init() {
 	phase3_data->cells_x[0]=5;
 	phase3_data->cells_y[0]=10;
 	
+	// Start Music
+	SYS_disableInts();
+	SND_startPlay_XGM(infiltration);
+	SYS_enableInts();
+	
 	// Draw background
 	VDP_setPaletteColors(PAL0, (u16*)snake_background.palette->data, 16);
     VDP_drawImageEx(PLAN_A, &snake_background, 
@@ -61,6 +67,9 @@ void phase3_destroy(void* data) {
 	// Phase data
 	struct phase3_data_s *phase3_data = (data);
 	
+	// Stop Music
+	SND_stopPlay_XGM();
+	
 	// Remove sprites
 	SPR_releaseSprite(phase3_data->snake_sprite);
 	
@@ -80,7 +89,7 @@ u16 phase3_update(void* data, u16 frame) {
 	SPR_setPosition(phase3_data->snake_sprite, 
 	phase3_data->snake_x[0], phase3_data->snake_y[0]);
 	
-	return frame > 200;
+	return 0;
 }
 
 // Process input
