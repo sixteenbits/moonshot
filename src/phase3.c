@@ -5,7 +5,7 @@
 #include "sfx.h"
 
 void* phase3_init() {
-	u16 i;
+	u16 i, countx, county;
 	
 	// Allocat memory for data
 	void* data = MEM_alloc(sizeof(struct phase3_data_s));
@@ -33,8 +33,18 @@ void* phase3_init() {
 		phase3_data->cells_sprites[i]=NULL;
 	}
 	phase3_data->cells_enabled[0]=1;
-	phase3_data->cells_x[0]=5;
-	phase3_data->cells_y[0]=10;
+	countx=10;
+	county=10;
+	for(i=0; i<CELLS_LENGTH; i++) {
+		phase3_data->cells_enabled[i]=1;
+		phase3_data->cells_x[i]=countx;
+		phase3_data->cells_y[i]=county;
+		countx+=70;
+		if(countx>320) {
+			countx=10;
+			county+=60;
+		}
+	}
 	
 	// Start Music
 	SYS_disableInts();
@@ -53,10 +63,12 @@ void* phase3_init() {
 		TILE_ATTR_FULL(PAL1, TRUE, FALSE, FALSE, phase3_data->tile_index++));
 	
 	// Init cells sprites
-	phase3_data->cells_sprites[0] = SPR_addSprite(&snake_adn, 
-		phase3_data->cells_x[0], phase3_data->cells_y[0], 
+	for(i=0; i<CELLS_LENGTH; i++) {
+	phase3_data->cells_sprites[i] = SPR_addSprite(&snake_adn, 
+		phase3_data->cells_x[i], phase3_data->cells_y[i], 
 		TILE_ATTR_FULL(PAL1, TRUE, FALSE, FALSE, phase3_data->tile_index++));
-	SPR_setAnim(phase3_data->cells_sprites[0],1);
+	SPR_setAnim(phase3_data->cells_sprites[i],1);
+	}
 	
 	// Return pointer to data
 	return data;

@@ -3,7 +3,7 @@
 #ifndef PHASE3_H
 #define SNAKE_LENGTH 11
 #define SNAKE_SPEED 1
-#define CELLS_LENGTH 11
+#define CELLS_LENGTH 20
 
 struct phase3_data_s
 {
@@ -18,9 +18,9 @@ struct phase3_data_s
 	// Snake sprites
 	Sprite* snake_sprite;
 	// Healthy cells cinematics
-	u16 cells_x[SNAKE_LENGTH];
-	u16 cells_y[SNAKE_LENGTH];
-	u16 cells_enabled[SNAKE_LENGTH];
+	u16 cells_x[CELLS_LENGTH];
+	u16 cells_y[CELLS_LENGTH];
+	u16 cells_enabled[CELLS_LENGTH];
 	// Healthy cells sprites
 	Sprite* cells_sprites[CELLS_LENGTH];
 };

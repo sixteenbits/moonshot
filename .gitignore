@@ -2,4 +2,5 @@ out/
 src/boot/
 res/gfx.h
 res/sprt.h
+res/sfx.h
 
