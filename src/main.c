@@ -33,6 +33,8 @@ void run_intro() {
 }
 
 void run_game_over() {
+	// Disable keys
+	JOY_setEventHandler(NULL);
 	// Reset Screen
 	VDP_resetScreen();
 	VDP_setPaletteColors(PAL0, (u16*)gameover.palette->data, 16);

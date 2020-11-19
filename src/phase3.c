@@ -48,7 +48,7 @@ void* phase3_init() {
 	
 	// Start Music
 	SYS_disableInts();
-	SND_startPlay_XGM(infiltration);
+	SND_startPlay_XGM(snake);
 	SYS_enableInts();
 	
 	// Draw background
@@ -80,7 +80,9 @@ void phase3_destroy(void* data) {
 	struct phase3_data_s *phase3_data = (data);
 	
 	// Stop Music
+	SYS_disableInts();
 	SND_stopPlay_XGM();
+	SYS_enableInts();
 	
 	// Remove sprites
 	SPR_releaseSprite(phase3_data->snake_sprite);
@@ -101,7 +103,7 @@ u16 phase3_update(void* data, u16 frame) {
 	SPR_setPosition(phase3_data->snake_sprite, 
 	phase3_data->snake_x[0], phase3_data->snake_y[0]);
 	
-	return 0;
+	return frame>1000;
 }
 
 // Process input
