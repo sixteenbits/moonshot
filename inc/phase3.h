@@ -16,7 +16,7 @@ struct phase3_data_s
 	u16 snake_vx;
 	u16 snake_vy;
 	// Snake sprites
-	Sprite* snake_sprite;
+	Sprite* snake_sprite[SNAKE_LENGTH];
 	// Healthy cells cinematics
 	u16 cells_x[CELLS_LENGTH];
 	u16 cells_y[CELLS_LENGTH];
