@@ -20,6 +20,7 @@ void* phase3_init() {
 		phase3_data->snake_enabled[i]=0;
 		phase3_data->snake_x[i]=0;
 		phase3_data->snake_y[i]=0;
+		phase3_data->snake_sprite[i]=0;
 	}
 	phase3_data->snake_enabled[0]=1;
 	phase3_data->snake_x[0]=152;
@@ -85,9 +86,7 @@ void phase3_destroy(void* data) {
 	SND_stopPlay_XGM();
 	SYS_enableInts();
 	
-	// Remove sprites
-	SPR_releaseSprite(phase3_data->snake_sprite);
-	
+	// Remove sprites	
 	for(i=0; i<CELLS_LENGTH; i++) {
 		if(phase3_data->cells_sprites[i]!=NULL) {
 			SPR_releaseSprite(phase3_data->cells_sprites[i]);
@@ -105,13 +104,17 @@ void phase3_destroy(void* data) {
 
 // Update Game
 u16 phase3_update(void* data, u16 frame) {
-	u16 i;
+	u16 i,j;
 	s16 dx, dy;
 	// Phase data
 	struct phase3_data_s *phase3_data = (data);
 	// Update positions
-	phase3_data->snake_x[0]+=phase3_data->snake_vx;
-	phase3_data->snake_y[0]+=phase3_data->snake_vy;
+	for(i=0; i<SNAKE_LENGTH; i++) {
+		if(phase3_data->snake_enabled[i]) {
+			phase3_data->snake_x[i]+=phase3_data->snake_vx;
+			phase3_data->snake_y[i]+=phase3_data->snake_vy;
+		}
+	}
 	
 	// Check collisions
 	for(i=0; i<CELLS_LENGTH; i++) {
@@ -120,17 +123,23 @@ u16 phase3_update(void* data, u16 frame) {
 		if(dx>-8 && dx<8 && dy>-8 && dy<8) {
 			phase3_data->cells_enabled[i]=0;
 			SPR_setAnim(phase3_data->cells_sprites[i],0);
-			/*
-			phase3_data->snake_sprite[i]=phase3_data->cells_sprites[i];
-			phase3_data->cells_sprites[i]=NULL;
-			SPR_setAnim(phase3_data->snake_sprite[i],0);
-			* */
+			// Add to snake in first empty slot
+			for(j=0; j<SNAKE_LENGTH; j++) {
+				if(!phase3_data->snake_enabled[j]) {
+					phase3_data->snake_sprite[j]=phase3_data->cells_sprites[i];
+					phase3_data->cells_sprites[i]=NULL;
+					phase3_data->snake_x[j]=phase3_data->snake_x[j-1]+16;
+					phase3_data->snake_y[j]=phase3_data->snake_y[j-1];
+					phase3_data->snake_enabled[j]=1;
+					break;
+				}
+			}
 		}
 	}
 	
 	// Update sprite position
 	for(i=0; i<SNAKE_LENGTH; i++) {
-		if(phase3_data->snake_x[i]) {
+		if(phase3_data->snake_enabled[i]) {
 			SPR_setPosition(phase3_data->snake_sprite[i], 
 			phase3_data->snake_x[i], phase3_data->snake_y[i]);
 		}
