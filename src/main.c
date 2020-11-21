@@ -14,10 +14,10 @@ void main_init() {
 	phase_count = 0;
 	
 	// Phase 0
-	phases[phase_count].phase_init=&phase3_init;
-	phases[phase_count].phase_destroy=&phase3_destroy;
-	phases[phase_count].input_handler=&phase3_input_handler;
-	phases[phase_count].phase_update=&phase3_update;
+	phases[phase_count].phase_init=&phase2_init;
+	phases[phase_count].phase_destroy=&phase2_destroy;
+	phases[phase_count].input_handler=&phase2_input_handler;
+	phases[phase_count].phase_update=&phase2_update;
 	phase_count++;
 }
 
@@ -36,7 +36,7 @@ void run_game_over() {
 	// Reset Screen
 	VDP_resetScreen();
 	VDP_setPaletteColors(PAL0, (u16*)gameover.palette->data, 16);
-    VDP_drawImageEx(PLAN_A, &gameover, 
+    VDP_drawImageEx(BG_A, &gameover, 
 		TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, TILE_USERINDEX), 0, 0, FALSE, TRUE);
 }
 
@@ -47,6 +47,7 @@ void run_game(u16 phase) {
 	phases[phase].data = (*phases[phase].phase_init)();
 	phases[phase].phase_status=0;
 	phases[phase].phase_frame=0;
+
 	// While phase is not over
 	while(!phases[phase].phase_status) {
 		// Read Controllers
@@ -69,6 +70,9 @@ int main(void)
 	
 	// Set screen width
     VDP_setScreenWidth320();
+    
+    // Set scrolling mode
+    VDP_setScrollingMode(HSCROLL_PLANE, VSCROLL_PLANE);
 
     //Init sprite engine
     SPR_init(0, 0, 0);

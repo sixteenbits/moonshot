@@ -4,8 +4,6 @@
 #include "sprt.h"
 
 void* phase2_init() {
-	u16 i;
-	
 	// Allocat memory for data
 	void* data = MEM_alloc(sizeof(struct phase2_data_s));
 	struct phase2_data_s *phase2_data = (data);
@@ -14,26 +12,38 @@ void* phase2_init() {
 	phase2_data->tile_index=TILE_USERINDEX;
 	phase2_data->ship_vx=0;
 	phase2_data->ship_vy=0;
-	for(i=0; i<ship_LENGTH; i++) {
-		phase2_data->ship_enabled[i]=0;
-		phase2_data->ship_x[i]=0;
-		phase2_data->ship_y[i]=0;
-	}
+	
 	phase2_data->ship_enabled[0]=1;
 	phase2_data->ship_x[0]=152;
 	phase2_data->ship_y[0]=104;
 	
-	// Draw background
-	VDP_setPaletteColors(PAL0, (u16*)ship_background.palette->data, 16);
-    VDP_drawImageEx(PLAN_A, &ship_background, 
-	TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, phase2_data->tile_index), 0, 0, FALSE, TRUE);
-	
-	// Init ship sprites
-	VDP_setPalette(PAL1,ship_adn.palette->data);
-	phase2_data->ship_sprite = SPR_addSprite(&ship_adn, 
+    // Background
+    int bg_i = 0;
+    int thex = 0;
+    int they = 0;
+    int val = 1;
+    int offset = 0;
+
+    for( bg_i=0; bg_i < 1280; bg_i++){
+        thex = bg_i % 40;
+        they = bg_i / 40;
+
+        val = (random() %  (10-1+1))+1;
+        if(val > 3) val = 1;
+        
+        VDP_setPalette(PAL1, space_bg.palette->data);
+        VDP_loadTileSet(space_bg.tileset,1,DMA);
+        VDP_setTileMapXY(BG_B,TILE_ATTR_FULL(PAL1,0,0,0,val), thex, they);
+    }
+
+	//Init ship sprites
+	phase2_data->ship_sprite = SPR_addSprite(
+        &ship_sprite, 
 		phase2_data->ship_x[0], phase2_data->ship_y[0], 
-		TILE_ATTR_FULL(PAL1, TRUE, FALSE, FALSE, phase2_data->tile_index++));
-	
+		TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, phase2_data->tile_index++)
+    );
+	VDP_setPalette(PAL2,ship_sprite.palette->data);
+		
 	// Return pointer to data
 	return data;
 };
@@ -54,21 +64,27 @@ void phase2_destroy(void* data) {
 u16 phase2_update(void* data, u16 frame) {
 	// Phase data
 	struct phase2_data_s *phase2_data = (data);
+	
 	// Update data
 	phase2_data->ship_x[0]+=phase2_data->ship_vx;
 	phase2_data->ship_y[0]+=phase2_data->ship_vy;
 	
 	// Update sprite position
-	SPR_setPosition(phase2_data->ship_sprite, 
-	phase2_data->ship_x[0], phase2_data->ship_y[0]);
+	SPR_setPosition(phase2_data->ship_sprite, phase2_data->ship_x[0], phase2_data->ship_y[0]);
+
+	// Update sprite animation
+	SPR_setAnim(phase2_data->ship_sprite, 1);
+
+    // Update scroll
+    VDP_setVerticalScroll(BG_B, phase2_data->offset -= 1);
 	
-	return frame > 200;
+	return 0;
 }
 
 // Process input
 // joy-> Indica el mando que ha activado la entrada
 // state -> Indica el estado del mando (boton activado)
-// changed -> indica si ha cambiado (pulsado o solatado)
+// changed -> indica si ha cambiado (pulsado o soltado)
 void phase2_input_handler(void* data, u16 joy, u16 state, u16 changed) {
 	// Phase data
 	struct phase2_data_s *phase2_data = (data);
