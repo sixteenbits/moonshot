@@ -37,13 +37,13 @@ void* phase2_init() {
     }
 
 	//Init ship sprites
-	VDP_setPalette(PAL2,ship_sprite.palette->data);
 	phase2_data->ship_sprite = SPR_addSprite(
         &ship_sprite, 
 		phase2_data->ship_x[0], phase2_data->ship_y[0], 
-		TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE, phase2_data->tile_index++)
+		TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, phase2_data->tile_index++)
     );
-	
+	VDP_setPalette(PAL2,ship_sprite.palette->data);
+		
 	// Return pointer to data
 	return data;
 };
@@ -64,6 +64,7 @@ void phase2_destroy(void* data) {
 u16 phase2_update(void* data, u16 frame) {
 	// Phase data
 	struct phase2_data_s *phase2_data = (data);
+	
 	// Update data
 	phase2_data->ship_x[0]+=phase2_data->ship_vx;
 	phase2_data->ship_y[0]+=phase2_data->ship_vy;
@@ -71,8 +72,11 @@ u16 phase2_update(void* data, u16 frame) {
 	// Update sprite position
 	SPR_setPosition(phase2_data->ship_sprite, phase2_data->ship_x[0], phase2_data->ship_y[0]);
 
+	// Update sprite animation
+	SPR_setAnim(phase2_data->ship_sprite, 1);
+
     // Update scroll
-    VDP_setVerticalScroll(BG_B,phase2_data->offset -= 1);
+    VDP_setVerticalScroll(BG_B, phase2_data->offset -= 1);
 	
 	return 0;
 }

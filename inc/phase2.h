@@ -4,6 +4,9 @@
 #define SHIP_SPEED 1
 #define SHIP_SIZE 2
 
+//animaciones
+#define ANIM_STAY 0
+
 struct phase2_data_s
 {
 	u16 tile_index;
