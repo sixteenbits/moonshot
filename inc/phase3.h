@@ -5,7 +5,7 @@
 #define CELLS_LENGTH 20
 #define SNAKE_LENGTH CELLS_LENGTH+1
 #define SNAKE_SPEED 1
-#define SNAKE_TRACE_LENGTH 21*8
+#define SNAKE_TRACE_LENGTH 21*16
 
 struct phase3_data_s
 {
@@ -17,6 +17,8 @@ struct phase3_data_s
 	u16 snake_enabled[SNAKE_LENGTH];
 	u16 snake_vx;
 	u16 snake_vy;
+	u16 snake_trace_x[SNAKE_TRACE_LENGTH];
+	u16 snake_trace_y[SNAKE_TRACE_LENGTH];
 	// Snake sprites
 	Sprite* snake_sprite[SNAKE_LENGTH];
 	// Healthy cells cinematics
@@ -47,5 +49,6 @@ u16 phase3_update(void*, u16 frame);
 void phase3_input_handler(void* data, u16 joy, u16 state, u16 changed);
 
 void add_cell_to_snake(void* data, u16 index);
+void move_snake(void* data);
 
 #endif

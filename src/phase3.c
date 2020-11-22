@@ -22,6 +22,10 @@ void* phase3_init() {
 		phase3_data->snake_y[i]=0;
 		phase3_data->snake_sprite[i]=0;
 	}
+	for(i=0; i<SNAKE_TRACE_LENGTH; i++) {
+		phase3_data->snake_trace_x[i]=0;
+		phase3_data->snake_trace_y[i]=0;
+	}
 	phase3_data->snake_enabled[0]=1;
 	phase3_data->snake_x[0]=152;
 	phase3_data->snake_y[0]=104;
@@ -108,13 +112,8 @@ u16 phase3_update(void* data, u16 frame) {
 	s16 dx, dy;
 	// Phase data
 	struct phase3_data_s *phase3_data = (data);
-	// Update positions
-	for(i=0; i<SNAKE_LENGTH; i++) {
-		if(phase3_data->snake_enabled[i]) {
-			phase3_data->snake_x[i]+=phase3_data->snake_vx;
-			phase3_data->snake_y[i]+=phase3_data->snake_vy;
-		}
-	}
+	// Move Snake
+	move_snake(data);
 	
 	// Check collisions
 	for(i=0; i<CELLS_LENGTH; i++) {
@@ -187,6 +186,30 @@ void add_cell_to_snake(void* data, u16 index) {
 			phase3_data->snake_enabled[j]=1;
 			break;
 		}
+	}
+}
+
+void move_snake(void* data) {
+	u16 i, j;
+	// Phase data
+	struct phase3_data_s *phase3_data = (data);
+	// Move head
+	phase3_data->snake_x[0]+=phase3_data->snake_vx;
+	phase3_data->snake_y[0]+=phase3_data->snake_vy;
+	
+	for(i=SNAKE_TRACE_LENGTH-1; i!=0; i--) {
+		phase3_data->snake_trace_x[i]=phase3_data->snake_trace_x[i-1];
+		phase3_data->snake_trace_y[i]=phase3_data->snake_trace_y[i-1];
+	}
+	phase3_data->snake_trace_x[0]=phase3_data->snake_x[0];
+	phase3_data->snake_trace_y[0]=phase3_data->snake_y[0];
+	j=0;		
+	for(i=0; i<SNAKE_LENGTH; i++) {
+		if(phase3_data->snake_enabled[i]) {
+			phase3_data->snake_x[i]=phase3_data->snake_trace_x[j];
+			phase3_data->snake_y[i]=phase3_data->snake_trace_y[j];
+		}
+		j+=16;
 	}
 }
 
