@@ -181,8 +181,8 @@ void add_cell_to_snake(void* data, u16 index) {
 			phase3_data->snake_sprite[j]=phase3_data->cells_sprites[index];
 			phase3_data->cells_sprites[index]=NULL;
 			SPR_setAnim(phase3_data->snake_sprite[j],0);
-			phase3_data->snake_x[j]=phase3_data->snake_x[j-1]+16;
-			phase3_data->snake_y[j]=phase3_data->snake_y[j-1];
+			phase3_data->snake_x[j]=500;
+			phase3_data->snake_y[j]=500;
 			phase3_data->snake_enabled[j]=1;
 			break;
 		}
@@ -214,7 +214,7 @@ void move_snake(void* data) {
 }
 
 u16 check_status(void* data) {
-	u16 i, all_cells_captured;
+	u16 i, j, dx, dy, all_cells_captured, snake_crosed;
 	// Phase data
 	struct phase3_data_s *phase3_data = (data);
 	
@@ -227,8 +227,25 @@ u16 check_status(void* data) {
 		}
 	}
 	
+	// Check snake cross
+	snake_crosed=0;
+	for(i=0; i<SNAKE_LENGTH; i++) {
+		for(j=0; j<SNAKE_LENGTH; j++) {
+			if(i!=j && phase3_data->snake_enabled[i] && phase3_data->snake_enabled[j]) {
+				dx=phase3_data->snake_x[i]-phase3_data->snake_x[j];
+				dy=phase3_data->snake_y[i]-phase3_data->snake_y[j];
+				if(dx>-4 && dx<4 && dy>-4 && dy<4) {
+					snake_crosed=1;
+				}
+			}
+		}
+	}
+	
 	if(all_cells_captured) {
 		return 1;
+	}
+	else if(snake_crosed) {
+		return 2;
 	}
 	else {
 		return 0;
