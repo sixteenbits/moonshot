@@ -43,6 +43,7 @@ void* phase2_init() {
 		TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, phase2_data->tile_index++)
     );
 	VDP_setPalette(PAL2,ship_sprite.palette->data);
+	SPR_setAnim(phase2_data->ship_sprite, ANIM_STAY);
 		
 	// Return pointer to data
 	return data;
@@ -71,9 +72,6 @@ u16 phase2_update(void* data, u16 frame) {
 	
 	// Update sprite position
 	SPR_setPosition(phase2_data->ship_sprite, phase2_data->ship_x[0], phase2_data->ship_y[0]);
-
-	// Update sprite animation
-	SPR_setAnim(phase2_data->ship_sprite, 1);
 
     // Update scroll
     VDP_setVerticalScroll(BG_B, phase2_data->offset -= 1);
