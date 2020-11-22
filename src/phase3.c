@@ -104,7 +104,7 @@ void phase3_destroy(void* data) {
 
 // Update Game
 u16 phase3_update(void* data, u16 frame) {
-	u16 i,j;
+	u16 i;
 	s16 dx, dy;
 	// Phase data
 	struct phase3_data_s *phase3_data = (data);
@@ -122,18 +122,7 @@ u16 phase3_update(void* data, u16 frame) {
 		dy=phase3_data->cells_y[i]-phase3_data->snake_y[0];
 		if(dx>-8 && dx<8 && dy>-8 && dy<8) {
 			phase3_data->cells_enabled[i]=0;
-			SPR_setAnim(phase3_data->cells_sprites[i],0);
-			// Add to snake in first empty slot
-			for(j=0; j<SNAKE_LENGTH; j++) {
-				if(!phase3_data->snake_enabled[j]) {
-					phase3_data->snake_sprite[j]=phase3_data->cells_sprites[i];
-					phase3_data->cells_sprites[i]=NULL;
-					phase3_data->snake_x[j]=phase3_data->snake_x[j-1]+16;
-					phase3_data->snake_y[j]=phase3_data->snake_y[j-1];
-					phase3_data->snake_enabled[j]=1;
-					break;
-				}
-			}
+			add_cell_to_snake(data, i);
 		}
 	}
 	
@@ -177,6 +166,24 @@ void phase3_input_handler(void* data, u16 joy, u16 state, u16 changed) {
             phase3_data->snake_vx=+SNAKE_SPEED;
 			phase3_data->snake_vy=0;
         }
+	}
+}
+
+void add_cell_to_snake(void* data, u16 index) {
+	u16 j;
+	// Phase data
+	struct phase3_data_s *phase3_data = (data);
+	SPR_setAnim(phase3_data->cells_sprites[index],0);
+	// Add to snake in first empty slot
+	for(j=0; j<SNAKE_LENGTH; j++) {
+		if(!phase3_data->snake_enabled[j]) {
+			phase3_data->snake_sprite[j]=phase3_data->cells_sprites[index];
+			phase3_data->cells_sprites[index]=NULL;
+			phase3_data->snake_x[j]=phase3_data->snake_x[j-1]+16;
+			phase3_data->snake_y[j]=phase3_data->snake_y[j-1];
+			phase3_data->snake_enabled[j]=1;
+			break;
+		}
 	}
 }
 

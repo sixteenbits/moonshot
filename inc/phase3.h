@@ -44,4 +44,6 @@ u16 phase3_update(void*, u16 frame);
  * */
 void phase3_input_handler(void* data, u16 joy, u16 state, u16 changed);
 
+void add_cell_to_snake(void* data, u16 index);
+
 #endif
