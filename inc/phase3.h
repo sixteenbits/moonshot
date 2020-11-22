@@ -50,5 +50,6 @@ void phase3_input_handler(void* data, u16 joy, u16 state, u16 changed);
 
 void add_cell_to_snake(void* data, u16 index);
 void move_snake(void* data);
+u16 check_status(void* data);
 
 #endif

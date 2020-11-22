@@ -135,7 +135,7 @@ u16 phase3_update(void* data, u16 frame) {
 		}
 	}
 	
-	return frame>1000;
+	return check_status(data);
 }
 
 // Process input
@@ -210,6 +210,28 @@ void move_snake(void* data) {
 			phase3_data->snake_y[i]=phase3_data->snake_trace_y[j];
 		}
 		j+=16;
+	}
+}
+
+u16 check_status(void* data) {
+	u16 i, all_cells_captured;
+	// Phase data
+	struct phase3_data_s *phase3_data = (data);
+	
+	// Check all cells captued
+	all_cells_captured=1;
+	for(i=0; i<CELLS_LENGTH; i++) {
+		if(phase3_data->cells_enabled[i]) {
+			all_cells_captured=0;
+			break;
+		}
+	}
+	
+	if(all_cells_captured) {
+		return 1;
+	}
+	else {
+		return 0;
 	}
 }
 
