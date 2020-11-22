@@ -118,11 +118,13 @@ u16 phase3_update(void* data, u16 frame) {
 	
 	// Check collisions
 	for(i=0; i<CELLS_LENGTH; i++) {
-		dx=phase3_data->cells_x[i]-phase3_data->snake_x[0];
-		dy=phase3_data->cells_y[i]-phase3_data->snake_y[0];
-		if(dx>-8 && dx<8 && dy>-8 && dy<8) {
-			phase3_data->cells_enabled[i]=0;
-			add_cell_to_snake(data, i);
+		if(phase3_data->cells_enabled[i]) {
+			dx=phase3_data->cells_x[i]-phase3_data->snake_x[0];
+			dy=phase3_data->cells_y[i]-phase3_data->snake_y[0];
+			if(dx>-8 && dx<8 && dy>-8 && dy<8) {
+				phase3_data->cells_enabled[i]=0;
+				add_cell_to_snake(data, i);
+			}
 		}
 	}
 	
@@ -173,12 +175,13 @@ void add_cell_to_snake(void* data, u16 index) {
 	u16 j;
 	// Phase data
 	struct phase3_data_s *phase3_data = (data);
-	SPR_setAnim(phase3_data->cells_sprites[index],0);
+	
 	// Add to snake in first empty slot
 	for(j=0; j<SNAKE_LENGTH; j++) {
 		if(!phase3_data->snake_enabled[j]) {
 			phase3_data->snake_sprite[j]=phase3_data->cells_sprites[index];
 			phase3_data->cells_sprites[index]=NULL;
+			SPR_setAnim(phase3_data->snake_sprite[j],0);
 			phase3_data->snake_x[j]=phase3_data->snake_x[j-1]+16;
 			phase3_data->snake_y[j]=phase3_data->snake_y[j-1];
 			phase3_data->snake_enabled[j]=1;
