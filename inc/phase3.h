@@ -1,9 +1,11 @@
 #include <genesis.h>
 
 #ifndef PHASE3_H
-#define SNAKE_LENGTH 11
-#define SNAKE_SPEED 1
+
 #define CELLS_LENGTH 20
+#define SNAKE_LENGTH CELLS_LENGTH+1
+#define SNAKE_SPEED 1
+#define SNAKE_TRACE_LENGTH 21*8
 
 struct phase3_data_s
 {
