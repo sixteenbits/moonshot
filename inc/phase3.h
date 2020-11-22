@@ -1,6 +1,7 @@
 #include <genesis.h>
 
 #ifndef PHASE3_H
+#define PHASE3_H
 
 #define CELLS_LENGTH 20
 #define SNAKE_LENGTH CELLS_LENGTH+1
