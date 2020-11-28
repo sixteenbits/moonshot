@@ -116,3 +116,13 @@ int main(void)
 void input_handler(u16 joy, u16 state, u16 changed) {
 	(*phases[current_phase].input_handler)(phases[0].data, joy, state, changed);
 }
+
+void killEntity(Entity* e) {
+	e->health = 0;
+	SPR_setVisibility(e->sprite, HIDDEN);
+}
+
+void reviveEntity(Entity* e) {
+	e->health = 1;
+	SPR_setVisibility(e->sprite, VISIBLE);
+}

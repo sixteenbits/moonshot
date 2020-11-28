@@ -93,6 +93,12 @@ void phase2_input_handler(void* data, u16 joy, u16 state, u16 changed) {
             phase2_data->ship_vx=0;
 			phase2_data->ship_vy=-SHIP_SPEED;
         }
+		// Ñapa para ajustar los controles
+		else
+		{
+			phase2_data->ship_vx=0;
+			phase2_data->ship_vy=0;
+		}
         if (changed & state & BUTTON_DOWN)
         {
             phase2_data->ship_vx=0;

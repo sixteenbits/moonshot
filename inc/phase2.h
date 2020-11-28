@@ -5,7 +5,7 @@
 #define SHIP_SIZE 2
 
 //animaciones
-#define ANIM_STAY 0
+#define ANIM_STAY 1
 
 struct phase2_data_s
 {
