@@ -4,20 +4,11 @@
 #define SHIP_SPEED 1
 #define SHIP_SIZE 2
 
-//animaciones
+// animaciones
 #define ANIM_STAY 1
 
-struct phase2_data_s
-{
-	u16 tile_index;
-	u16 ship_x[SHIP_SIZE];
-	u16 ship_y[SHIP_SIZE];
-	u16 ship_enabled[SHIP_SIZE];
-	u16 ship_vx;
-	u16 ship_vy;
-	Sprite* ship_sprite;
-    u16 offset;
-};
+// enemigos
+#define MAX_ENEMIES 6
 
 typedef struct
 {
@@ -32,7 +23,19 @@ typedef struct
 	char name[6];
 } Entity;
 
-
+struct phase2_data_s
+{
+	u16 tile_index;
+	u16 ship_x[SHIP_SIZE];
+	u16 ship_y[SHIP_SIZE];
+	u16 ship_enabled[SHIP_SIZE];
+	u16 ship_vx;
+	u16 ship_vy;
+	Sprite* ship_sprite;
+    u16 offset;
+	Entity enemies[MAX_ENEMIES];
+	u16 enemiesLeft;
+};
 
 void* phase2_init();
 void phase2_destroy(void*);

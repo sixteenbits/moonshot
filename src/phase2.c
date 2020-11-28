@@ -24,7 +24,7 @@ void* phase2_init() {
     int val = 1;
     int offset = 0;
 
-    for( bg_i=0; bg_i < 1280; bg_i++){
+    for(bg_i=0; bg_i < 1280; bg_i++){
         thex = bg_i % 40;
         they = bg_i / 40;
 
@@ -44,6 +44,24 @@ void* phase2_init() {
     );
 	VDP_setPalette(PAL2,ship_sprite.palette->data);
 	SPR_setAnim(phase2_data->ship_sprite, ANIM_STAY);
+
+	// Cambia el color del sprite
+	//VDP_setPaletteColor(34,RGB24_TO_VDPCOLOR(0x0078f8));
+	// Init the enemies
+	Entity* e = phase2_data->enemies;
+
+	for(int i = 0; i < MAX_ENEMIES; i++){
+		e->x = i*32;
+		e->y = 32;
+		e->w = 16;
+		e->h = 16;
+		e->velx = 1;
+		e->health = 1;
+		e->sprite = SPR_addSprite(&ship_sprite,e->x,e->y,TILE_ATTR(PAL2,0,TRUE,FALSE));
+		sprintf(e->name, "En%d",i);
+		phase2_data->enemiesLeft++;
+		e++;
+	}
 		
 	// Return pointer to data
 	return data;
