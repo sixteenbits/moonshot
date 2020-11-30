@@ -25,7 +25,19 @@
 #define ENEMY_LEFT_IDLE 7
 
 #define ENEMY_UP_EXC 8
+
 #define ENEMY_UP_EXC_IDLE 12
+#define ENEMY_RIGTH_EXC_IDLE 13
+#define ENEMY_DOWN_EXC_IDLE 14
+#define ENEMY_LEFT_EXC_IDLE 15
+
+typedef struct enemy_data{
+    Sprite * sprite;
+    u8 direction;
+    u16 x;
+    u16 y;
+    u8 alert;
+};
 
 struct phase1_data{
     u16 tile_index;
@@ -35,7 +47,10 @@ struct phase1_data{
     u8 life;
     u8 lives;
     u16** maps;
+    struct enemy_data* enemies;
 };
+
+struct enemy_data enemies[3];
 
 const u16 map1[1120] = {25,10,11,10,11,10,11,10,11,10,11,10,11,72,73,74,75,10,11,10,11,10,11,10,11,10,11,72,73,74,75,10,11,10,11,10,11,10,11,12,
 41,35,36,35,36,137,138,139,140,35,36,35,36,35,36,35,36,35,36,35,36,35,36,35,36,67,68,35,36,35,36,35,36,35,36,35,36,35,36,28,
