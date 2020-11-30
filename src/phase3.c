@@ -58,7 +58,7 @@ void* phase3_init() {
 	
 	// Draw background
 	VDP_setPaletteColors(PAL0, (u16*)snake_background.palette->data, 16);
-    VDP_drawImageEx(PLAN_A, &snake_background, 
+    VDP_drawImageEx(BG_A, &snake_background, 
 	TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, phase3_data->tile_index), 0, 0, FALSE, TRUE);
 	
 	// Init snake sprites
@@ -140,7 +140,7 @@ u16 phase3_update(void* data, u16 frame) {
 
 // Process input
 // joy-> Indica el mando que ha activado la entrada
-// state -> Indica el estado del mando (boton activado)
+// state -> Indica el estado del mando (numero de boton activado)
 // changed -> indica si ha cambiado (pulsado o solatado)
 void phase3_input_handler(void* data, u16 joy, u16 state, u16 changed) {
 	// Phase data
@@ -214,7 +214,8 @@ void move_snake(void* data) {
 }
 
 u16 check_status(void* data) {
-	u16 i, j, dx, dy, all_cells_captured, snake_crosed;
+	u16 i, j, all_cells_captured, snake_crosed;
+	s16 dx, dy;
 	// Phase data
 	struct phase3_data_s *phase3_data = (data);
 	

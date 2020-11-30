@@ -1,21 +1,23 @@
 #include <genesis.h>
 
-#ifndef BG_A
-#define BG_A PLAN_A
-#define BG_B PLAN_B
-#endif
-
 #ifndef MAIN_H
 #define MAIN_H
 
 struct phase_s
 {
+	// Init phase. Returns pointer to arbitrary data
 	void* (*phase_init)(void);
+	// Destroy phase. Pointer to arbitrary data
 	void (*phase_destroy)(void*);
+	// Joy handler. Called with any joy event
+	// arbitrary_data joy_number, button_number, changed
 	void (*input_handler)(void*, u16, u16, u16);
+	// Update phase. Do physics, etc
 	u16 (*phase_update)(void*, u16);
 	void* data;
+	// Phase status. 0=Still playing; 1=Player wins; 2=Player loses
 	u16 phase_status;
+	// Current frame in phase
 	u16 phase_frame;
 };
 

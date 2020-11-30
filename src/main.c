@@ -38,7 +38,7 @@ void run_game_over() {
 	// Reset Screen
 	VDP_resetScreen();
 	VDP_setPaletteColors(PAL0, (u16*)gameover.palette->data, 16);
-    VDP_drawImageEx(PLAN_A, &gameover, 
+    VDP_drawImageEx(BG_A, &gameover, 
 		TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, TILE_USERINDEX), 0, 0, FALSE, TRUE);
 }
 
