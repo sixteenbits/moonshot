@@ -2,6 +2,7 @@
 #include "phase1.h"
 #include "sprt.h"
 #include "gfx.h"
+#include "music.h"
 
 void * phase1_init(){
 
@@ -15,7 +16,7 @@ void * phase1_init(){
     mystruct->tile_index=TILE_USERINDEX;
 
     VDP_loadTileSet(&moontlset,mystruct->tile_index,DMA);
-    VDP_setPalette(PAL0,moontlset_pal.data);
+    VDP_setPalette(PAL1,moontlset_pal.data);
 
 
    
@@ -25,16 +26,33 @@ void * phase1_init(){
         for (j = 0; j < 28; j++)
          {
             
-            VDP_setTileMapXY(BG_A, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, mystruct->tile_index + mymap[i + 40 * j]), i, j);
+            VDP_setTileMapXY(BG_B, TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, (mystruct->tile_index-1) + map1[(i) + 40 * j]), i, j);
          }
         }
 
+     for (i = 0; i < 40; i++)
+        {
+        for (j = 0; j < 28; j++)
+         {
+            
+            VDP_setTileMapXY(BG_A, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, (mystruct->tile_index-1) + map_1b[i + 40 * j]), i, j);
+         }
+        }
+    
+
      mystruct->tile_index+=moontlset.numTile;
 
-    VDP_setPalette(PAL1,playersprt.palette->data);
-    Sprite* sprt=SPR_addSprite(&playersprt, mystruct->player_x, mystruct->player_y,TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, mystruct->tile_index));
+    VDP_setPalette(PAL2,playersprt.palette->data);
+    Sprite* sprt=SPR_addSprite(&playersprt, mystruct->player_x, mystruct->player_y,TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, mystruct->tile_index));
     SPR_setAnim(sprt, IDLE);
+    VDP_setPalette(PAL3,astronaut.palette->data);
+    Sprite * enemy1 = SPR_addSprite(&astronaut, 120,40,TILE_ATTR_FULL(PAL3,FALSE,FALSE,FALSE,mystruct->tile_index));
+    Sprite * enemy2 = SPR_addSprite(&astronaut, 50,60,TILE_ATTR_FULL(PAL3,FALSE,FALSE,FALSE,mystruct->tile_index));
+    SPR_setAnim(enemy1,ENEMY_DOW_IDLE);
+    SPR_setAnim(enemy2, ENEMY_UP_EXC_IDLE);
     mystruct->player_sprt=sprt;
+
+    XGM_startPlay(infiltration);
     
     
     return data;
@@ -64,20 +82,29 @@ void phase1_input_sinc_handler(void* data, u16 joy){
 	
         
 		if (state & BUTTON_UP){
-            phase1_data->player_y--;
+            if(phase1_data->player_y>0 && !phase1_collider(data,0,2)){
+                phase1_data->player_y--;
+                
+            }
             SPR_setAnim(phase1_data->player_sprt,UP);
         }else{
 
         if(state & BUTTON_DOWN){
-            phase1_data->player_y++;
+            if(phase1_data->player_y<184 && !phase1_collider(data,4,2)){
+                phase1_data->player_y++;
+            }
             SPR_setAnim(phase1_data->player_sprt,DOWN);
         }else{ if(state & BUTTON_LEFT){
-            phase1_data->player_x--;
+            if(phase1_data->player_x>0 && !phase1_collider(data,4,0)){
+                phase1_data->player_x--;
+            }
             SPR_setAnim(phase1_data->player_sprt,LEFT);
         }else{
 
         if(state & BUTTON_RIGHT){
-            phase1_data->player_x++;
+            if(phase1_data->player_x<284 && !phase1_collider(data,2,4)){
+                phase1_data->player_x++;
+            }
             SPR_setAnim(phase1_data->player_sprt,RIGHT);
         }
         else{
@@ -86,6 +113,21 @@ void phase1_input_sinc_handler(void* data, u16 joy){
 
 
    
+}
+
+u8 phase1_collider(void * data,u16 offsety, u16 offsetx){
+    struct phase1_data *phase1_data = (data);
+
+    int tile_x = (phase1_data->player_x/8)+offsetx;
+    int tile_y = (phase1_data->player_y/8)+offsety;
+
+    u16 currentTile = map_1b[tile_x+40*tile_y];
+
+    if(currentTile==94){
+        return 0;
+    }else{
+        return currentTile;
+    }
 }
 
 void phase1_input_handler(void* data, u16 joy, u16 state, u16 changed){
