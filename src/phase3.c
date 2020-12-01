@@ -214,7 +214,7 @@ void move_snake(void* data) {
 }
 
 u16 check_status(void* data) {
-	u16 i, j, all_cells_captured, snake_crosed;
+	u16 i, all_cells_captured, snake_crosed;
 	s16 dx, dy;
 	// Phase data
 	struct phase3_data_s *phase3_data = (data);
@@ -230,16 +230,15 @@ u16 check_status(void* data) {
 	
 	// Check snake cross
 	snake_crosed=0;
-	for(i=0; i<SNAKE_LENGTH; i++) {
-		for(j=0; j<SNAKE_LENGTH; j++) {
-			if(i!=j && phase3_data->snake_enabled[i] && phase3_data->snake_enabled[j]) {
-				dx=phase3_data->snake_x[i]-phase3_data->snake_x[j];
-				dy=phase3_data->snake_y[i]-phase3_data->snake_y[j];
-				if(dx>-4 && dx<4 && dy>-4 && dy<4) {
-					snake_crosed=1;
-				}
+	for(i=1; i<SNAKE_LENGTH; i++) {
+		if(phase3_data->snake_enabled[i]) {
+			dx=phase3_data->snake_x[i]-phase3_data->snake_x[0];
+			dy=phase3_data->snake_y[i]-phase3_data->snake_y[0];
+			if(dx>-4 && dx<4 && dy>-4 && dy<4) {
+				snake_crosed=1;
 			}
 		}
+		
 	}
 	
 	if(all_cells_captured) {
